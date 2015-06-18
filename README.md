@@ -4,7 +4,7 @@ The following assumes the source tree for ceph is in the host machine
 at `/path/to/cephsrc`.
 
 ```bash
-docker run -v /path/to/cephsrc:/cephsrc ivotron/cephdev
+docker run --rm -ti -v /path/to/cephsrc:/cephsrc ivotron/cephdev
 ```
 
 Inside the container:

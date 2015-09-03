@@ -1,7 +1,7 @@
 Wraps a given Ceph codebase in a container that can be seen as
 a [teuthology] remote (a.k.a. [test node][framework]). This is 
 basically build dependencies, plus an `sshd`, plus environment setup 
-so that (1) teuthology can communicate with the container and 
+so that (1) teuthology can communicate with the container via SSH and 
 (2) binaries built from source are in the `PATH`.
 
 Quickstart:
@@ -68,4 +68,4 @@ Quickstart:
 
 [teuthology]: http://github.com/ceph/teuthology
 [cdev]: https://github.com/ivotron/docker-cephdev
-[framework]: https://github.com/ceph/teuthology/blob/e5bdf368d5c802a40a8a82cae806fcc89ec12734/README.rst
+[framework]: https://github.com/ceph/teuthology/blob/e5bdf368d5c802a40a8a82cae806fcc89ec12734/docs/COMPONENTS.rst

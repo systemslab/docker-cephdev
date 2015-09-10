@@ -17,4 +17,3 @@ cd /cephsrc
 make -j4
 make check
 ```
-

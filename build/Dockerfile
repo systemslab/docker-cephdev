@@ -2,9 +2,9 @@ FROM ubuntu:trusty
 
 MAINTAINER Ivo Jimenez <ivo.jimenez@gmail.com>
 
-RUN sudo apt-get update && \
-    sudo apt-get build-dep -yq ceph && \
-    sudo apt-get install -yq \
-       libudev-dev ccache python-virtualenv xmlstarlet && \
-    sudo apt-get clean && \
-    sudo rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN wget https://raw.githubusercontent.com/ceph/ceph/master/install-deps.sh && \
+    wget https://raw.githubusercontent.com/ceph/ceph/master/debian/control && \
+    apt-get update && apt-get install -y git && \
+    chmod 755 install-deps.sh && ./install-deps.sh && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

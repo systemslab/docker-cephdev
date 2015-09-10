@@ -47,8 +47,10 @@ Quickstart:
     ```bash
     docker run \
       --name remote0
-      -p 2222:22
-      -d -e AUTHORIZED_KEYS="`cat ~/.ssh/id_rsa.pub`" \
+      -d \
+      -e SSHD_PORT=2222 \
+      -e AUTHORIZED_KEYS="`cat ~/.ssh/id_rsa.pub`" \
+      --net=host \
       -v `pwd`:/ceph \
       -v /dev:/dev \
       -v /tmp/ceph_data/$RANDOM:/var/lib/ceph \
@@ -57,7 +59,7 @@ Quickstart:
       ivotron/cephdev
     ```
 
- 3. Execute teuthology using the `wip-11892-docker` branch:
+ 3. Execute teuthology using the [`wip-11892-docker`][wip] branch:
 
     ```bash
     teuthology \
@@ -66,6 +68,58 @@ Quickstart:
       ~/test.yml
     ```
 
+If more than one remote is needed, one can launch multiple containers 
+and modify the `SSHD_PORT` variable for each `docker run` invocation. 
+For example, for four teuthology remotes:
+
+```bash
+docker run \
+  --name remote0
+  -d \
+  -e SSHD_PORT=2222 \
+  ...
+
+
+docker run \
+  --name remote0
+  -d \
+  -e SSHD_PORT=2223 \
+  ...
+
+docker run \
+  --name remote0
+  -d \
+  -e SSHD_PORT=2224 \
+  ...
+
+docker run \
+  --name remote0
+  -d \
+  -e SSHD_PORT=2225 \
+  ...
+```
+
+Then, the corresponding targets in the teuthology job file need to be 
+updated:
+
+```
+roles:
+- [mon.0, osd.0]
+- [osd.1, osd.2]
+- [client.0]
+- [client.1]
+
+tasks:
+...
+
+targets:
+  'root@localhost:2222': ssh-dss ignored
+  'root@localhost:2223': ssh-dss ignored
+  'root@localhost:2224': ssh-dss ignored
+  'root@localhost:2225': ssh-dss ignored
+```
+
 [teuthology]: http://github.com/ceph/teuthology
 [cdev]: https://github.com/ivotron/docker-cephdev
 [framework]: https://github.com/ceph/teuthology/blob/e5bdf368d5c802a40a8a82cae806fcc89ec12734/docs/COMPONENTS.rst
+[wip]: https://github.com/ceph/teuthology/tree/wip-11892-docker

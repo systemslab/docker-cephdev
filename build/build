@@ -1,0 +1,20 @@
+if [ -z $SHA1_OR_REF ] ; then
+  cd /
+  git clone https://github.com/ceph/ceph
+  cd ceph
+  git reset --hard $SHA1_OR_REF
+  git submodule update --init --recursive
+fi
+
+cd /ceph
+./autogen.sh
+./configure \
+  --disable-static --with-debug \
+  CC='ccache gcc' CFLAGS="-Wall -g" \
+  CXX='ccache g++' CXXFLAGS="-Wall -g"
+
+if [ -n $BUILD_THREADS ] ; then
+  BUILD_THREADS=4
+fi
+
+make -j$BUILD_THREADS

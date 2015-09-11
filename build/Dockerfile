@@ -8,3 +8,5 @@ RUN wget https://raw.githubusercontent.com/ceph/ceph/master/install-deps.sh && \
     chmod 755 install-deps.sh && ./install-deps.sh && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+ADD build /
+ENTRYPOINT ["/build"]

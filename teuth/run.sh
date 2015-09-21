@@ -26,10 +26,10 @@ if [ ! -f /.root_pw_set ]; then
 	/set_root_pw.sh
 fi
 
-if [ -n $SSHD_PORT ]; then
+if [ -z $SSHD_PORT ]; then
   SSHD_PORT=22
 fi
 
-sed -i "s/Port*/Port ${SSHD_PORT}/" /etc/ssh/sshd_config
+sed -i "s/Port.*/Port ${SSHD_PORT}/" /etc/ssh/sshd_config
 
 exec /usr/sbin/sshd -D

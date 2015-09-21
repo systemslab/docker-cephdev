@@ -5,10 +5,11 @@ MAINTAINER Ivo Jimenez <ivo.jimenez@gmail.com>
 # install deps
 RUN wget https://raw.githubusercontent.com/ceph/ceph/master/install-deps.sh && \
     wget https://raw.githubusercontent.com/ceph/ceph/master/debian/control && \
+    mkdir debian && mv control debian && \
     apt-get update && apt-get install -y git && \
     chmod 755 install-deps.sh && ./install-deps.sh && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /debian
 
 # * modify sshd conf
 # * workaround for the way ubuntu deals with env for sudo

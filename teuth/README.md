@@ -4,7 +4,7 @@ basically build dependencies, plus an `sshd`, plus environment setup
 so that (1) teuthology can communicate with the container via SSH and 
 (2) binaries built from source are in the `PATH`.
 
-Quickstart:
+# Quickstart
 
  1. Write a file containing an entire teuthology job (tasks, targets 
     and roles in a YAML file):
@@ -67,6 +67,8 @@ Quickstart:
       --suite-path /path/to/ceph-qa-suite/ \
       ~/test.yml
     ```
+
+# Multiple Targets
 
 If more than one remote is needed, one can launch multiple containers 
 and modify the `SSHD_PORT` variable for each `docker run` invocation. 

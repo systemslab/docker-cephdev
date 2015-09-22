@@ -22,14 +22,22 @@ if [ "${AUTHORIZED_KEYS}" != "**None**" ]; then
     done
 fi
 
+
 if [ ! -f /.root_pw_set ]; then
 	/set_root_pw.sh
 fi
 
+
 if [ -z "$SSHD_PORT" ]; then
   SSHD_PORT=22
 fi
-
 sed -i "s/Port.*/Port ${SSHD_PORT}/" /etc/ssh/sshd_config
+
+
+if [ ! -d /ceph ]; then
+  echo "Expecting ceph source folder in /ceph"
+  exit 1
+fi
+
 
 exec /usr/sbin/sshd -D

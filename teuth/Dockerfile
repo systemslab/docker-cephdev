@@ -23,8 +23,5 @@ RUN sed -i "s/UsePAM.*/UsePAM yes/" /etc/ssh/sshd_config && \
     mkdir /var/log/ceph && mkdir /etc/ceph && \
     mkdir /usr/local/lib/ceph && ln -s /ceph/src/.libs /usr/local/lib/ceph/erasure-code
 
-# add our run.sh
+# override tutum's run.sh with our own
 ADD run.sh /run.sh
-RUN chmod 755 /run.sh
-
-WORKDIR /ceph

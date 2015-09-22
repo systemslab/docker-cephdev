@@ -1,4 +1,7 @@
-if [ -z $SHA1_OR_REF ] ; then
+#!/bin/bash
+set -e
+
+if [ -n "$SHA1_OR_REF" ] ; then
   cd /
   git clone https://github.com/ceph/ceph
   cd ceph
@@ -6,15 +9,20 @@ if [ -z $SHA1_OR_REF ] ; then
   git submodule update --init --recursive
 fi
 
-cd /ceph
-./autogen.sh
-./configure \
-  --disable-static --with-debug \
-  CC='ccache gcc' CFLAGS="-Wall -g" \
-  CXX='ccache g++' CXXFLAGS="-Wall -g"
+# build source code if /ceph folder exists
+if [ -d /ceph ] ; then
+  cd /ceph
+  ./autogen.sh
+  ./configure \
+    --disable-static --with-debug \
+    CC='ccache gcc' CFLAGS="-Wall -g" \
+    CXX='ccache g++' CXXFLAGS="-Wall -g"
 
-if [ -n $BUILD_THREADS ] ; then
-  BUILD_THREADS=4
+  if [ -n $BUILD_THREADS ] ; then
+    BUILD_THREADS=4
+  fi
+
+  exec make -j$BUILD_THREADS
+else
+  echo "No /ceph folder found."
 fi
-
-make -j$BUILD_THREADS

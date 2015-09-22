@@ -26,7 +26,7 @@ if [ ! -f /.root_pw_set ]; then
 	/set_root_pw.sh
 fi
 
-if [ -z $SSHD_PORT ]; then
+if [ -z "$SSHD_PORT" ]; then
   SSHD_PORT=22
 fi
 

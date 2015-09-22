@@ -35,7 +35,8 @@ sed -i "s/Port.*/Port ${SSHD_PORT}/" /etc/ssh/sshd_config
 
 
 if [ ! -d /ceph ]; then
-  echo "Expecting ceph source folder in /ceph"
+  echo ""
+  echo "ERROR: Expecting ceph source folder in /ceph"
   exit 1
 fi
 

@@ -71,8 +71,8 @@ so that (1) teuthology can communicate with the container via SSH and
 # Multiple Targets
 
 If more than one remote is needed, one can launch multiple containers 
-and modify the `SSHD_PORT` variable for each `docker run` invocation. 
-For example, for four teuthology remotes:
+locally and modify the `SSHD_PORT` variable for each `docker run`
+invocation. For example, for four teuthology remotes:
 
 ```bash
 docker run \
@@ -83,19 +83,19 @@ docker run \
 
 
 docker run \
-  --name remote0
+  --name remote1
   -d \
   -e SSHD_PORT=2223 \
   ...
 
 docker run \
-  --name remote0
+  --name remote2
   -d \
   -e SSHD_PORT=2224 \
   ...
 
 docker run \
-  --name remote0
+  --name remote3
   -d \
   -e SSHD_PORT=2225 \
   ...

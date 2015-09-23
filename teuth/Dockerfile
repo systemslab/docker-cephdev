@@ -16,7 +16,7 @@ RUN wget https://raw.githubusercontent.com/ceph/ceph/master/install-deps.sh && \
 # * add /ceph to PATH
 # * create expected dirs/links
 RUN sed -i "s/UsePAM.*/UsePAM yes/" /etc/ssh/sshd_config && \
-    echo "PATH=/ceph/src:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" > /etc/environment && \
+    echo "PATH=/ceph/src:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/ceph/bin" > /etc/environment && \
     echo "alias sudo='sudo env PATH=\$PATH'" >> /etc/environment && \
     sed -i "s/Defaults.*env_reset//" /etc/sudoers && \
     sed -i "s/Defaults.*secure_path.*//" /etc/sudoers && \

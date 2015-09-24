@@ -6,16 +6,21 @@ following will build ceph:
 docker run --rm -ti -v /path/to/cephsrc:/ceph ivotron/cephdev-build
 ```
 
-See the [Dockerfile](Dockerfile) for the commands that get invoked. 
+See the [build](build) entry point script for a list of the commands 
+that get invoked.
+
+# Variables
+
+## Make threads
+
 The `BUILD_THREADS` environment variable specifies the number passed 
 to `make`'s `-j` flag (defaults to 4).
 
-# Building from a specific `SHA1` or `REF`
+## Building from a specific `SHA1` or `REF`
 
-In the above example, the codebase is passed as a mount point from the 
-host to the container. Alternatively, if the environment variable 
-`SHA1_OR_REF` is given, the source code will be checked out and placed 
-in the container's filesystem. For example:
+If the environment variable `SHA1_OR_REF` is given, the source code 
+will be checked out and placed in the container's filesystem. For 
+example:
 
 ```bash
 docker run \
@@ -26,4 +31,14 @@ docker run \
 ```
 
 The above clones the repo, resets it `infernalis` and compiles the 
-code. A `sha1` can be given too.
+code. A `sha1` can be given too. As mentioned, the above will place 
+the source code inside the container. Alternatively, if the `/ceph` 
+folder is mounted in the container, the `build` script assumes it is 
+holding a ceph's git working directory and doesn't clone it, it just 
+checks out the version specified in `$SHA_OR_REF` (**WARNING**: in 
+order to avoid issues, the script executes `git clean -fd`)
+
+## Custom git URL
+
+The `GIT_URL` variable specifies the repo where the ceph codebase is 
+pulled from. The default value is `https://github.com/ceph/ceph`.

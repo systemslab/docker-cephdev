@@ -1,11 +1,19 @@
 #!/bin/bash
 set -e
 
-if [ -n "$SHA1_OR_REF" ] ; then
-  cd /
-  git clone https://github.com/ceph/ceph
-  cd ceph
+if [ -n "$GIT_URL"] ; then
+  GIT_URL="https://github.com/ceph/ceph"
+fi
+
+if [ -z "$SHA1_OR_REF" ] ; then
+  if [ ! -d /ceph/.git ] ; then
+    cd /
+    git clone $GIT_URL
+  fi
+  cd /ceph
+  git clean -fd
   git reset --hard $SHA1_OR_REF
+  git clean -fd
   git submodule update --init --recursive
 fi
 

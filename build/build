@@ -1,11 +1,11 @@
 #!/bin/bash
 set -e
 
-if [ -n "$GIT_URL"] ; then
+if [ -z "$GIT_URL"] ; then
   GIT_URL="https://github.com/ceph/ceph"
 fi
 
-if [ -z "$SHA1_OR_REF" ] ; then
+if [ -n "$SHA1_OR_REF" ] ; then
   if [ ! -d /ceph/.git ] ; then
     cd /
     git clone $GIT_URL

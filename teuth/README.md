@@ -6,7 +6,14 @@ so that (1) teuthology can communicate with the container via SSH and
 
 # Quickstart
 
- 1. Write a file containing an entire teuthology job (tasks, targets 
+ 1. Ensure that docker has not previously set up a bridge:
+
+    ```bash
+    ifconfig docker0 down
+    brctl delbr docker0
+    ```
+
+ 2. Write a file containing an entire teuthology job (tasks, targets 
     and roles in a YAML file):
 
     ```yaml
@@ -41,12 +48,12 @@ so that (1) teuthology can communicate with the container via SSH and
     lock_server: ''
     ```
 
- 2. Initialize a [`cephdev`][cdev] container (the following assumes 
+ 3. Initialize a [`cephdev`][cdev] container (the following assumes 
     `$PWD` is the folder containing the ceph code in your machine):
 
     ```bash
     docker run \
-      --name remote0
+      --name remote0 \
       -d \
       -e SSHD_PORT=2222 \
       -e AUTHORIZED_KEYS="`cat ~/.ssh/id_rsa.pub`" \
@@ -55,11 +62,11 @@ so that (1) teuthology can communicate with the container via SSH and
       -v /dev:/dev \
       -v /tmp/ceph_data/$RANDOM:/var/lib/ceph \
       --cap-add=SYS_ADMIN --privileged \
-      --device /dev/fuse
+      --device /dev/fuse \
       ivotron/cephdev
     ```
 
- 3. Execute teuthology using the [`wip-11892-docker`][wip] branch:
+ 4. Execute teuthology using the [`wip-11892-docker`][wip] branch:
 
     ```bash
     teuthology \

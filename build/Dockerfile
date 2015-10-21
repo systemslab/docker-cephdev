@@ -7,7 +7,7 @@ RUN apt-get update && \
     wget https://raw.githubusercontent.com/ceph/ceph/master/install-deps.sh && \
     wget https://raw.githubusercontent.com/ceph/ceph/master/debian/control && \
     mkdir debian && mv control debian && \
-    apt-get install -y git && \
+    apt-get install -y git ccache && \
     chmod 755 install-deps.sh && \
     ./install-deps.sh && \
     apt-get clean && \

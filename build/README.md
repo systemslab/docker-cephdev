@@ -16,6 +16,13 @@ that get invoked.
 The `BUILD_THREADS` environment variable specifies the number passed 
 to `make`'s `-j` flag (defaults to 4).
 
+## Configure options
+
+The `CEPH_PKGS` environment variable specifies extra packages that 
+Ceph should be compiled with. For example, `CEPH_PKGS="--with-lttng"`
+compiles Ceph with LTTnG. To see a list of options, go to a Ceph repo 
+and run `./configure --help`. 
+
 ## Building from a specific `SHA1` or `REF`
 
 If the environment variable `SHA1_OR_REF` is given, the source code 
@@ -25,8 +32,9 @@ example:
 ```bash
 docker run \
   --name infernalis-build \
-  --env SHA1_OR_REF=infernalis \
-  --env BUILD_THREADS=16
+  --env SHA1_OR_REF="infernalis" \
+  --env CEPH_PKGS="--with-lttng" \
+  --env BUILD_THREADS=16 \
   ivotron/cephdev-build
 ```
 

@@ -6,10 +6,17 @@ MAINTAINER Ivo Jimenez <ivo.jimenez@gmail.com>
 RUN wget https://raw.githubusercontent.com/ceph/ceph/master/install-deps.sh && \
     wget https://raw.githubusercontent.com/ceph/ceph/master/debian/control && \
     mkdir debian && mv control debian && \
-    apt-get update && apt-get install -y git && \
+    apt-get update && apt-get install -y git libopenmpi-dev openmpi-bin && \
     chmod 755 install-deps.sh && ./install-deps.sh && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /debian
+
+RUN mkdir /mdtest && cd /mdtest  && \
+    wget http://sourceforge.net/projects/mdtest/files/latest/download && tar xzvf download && \
+    sed -i s/"CC = \$(CC.\$(OS))"/"CC = mpicc"/g Makefile && \ 
+    make
+
+ENV PATH /mdtest/:$PATH
 
 # * modify sshd conf
 # * workaround for the way ubuntu deals with env for sudo

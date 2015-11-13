@@ -1,0 +1,46 @@
+#!/bin/bash
+set -e
+
+
+if [ -z "$GIT_URL" ] ; then
+  GIT_URL="https://github.com/ceph/ceph"
+fi
+
+if [ -n "$SHA1_OR_REF" ] ; then
+  if [ ! -d /ceph/.git ] ; then
+    cd /
+    git clone $GIT_URL
+  fi
+  cd /ceph
+  git clean -fd
+  git checkout master
+  if [ `git branch --list dev` ] ; then
+    git branch -D dev
+  fi
+  git checkout -b dev $SHA1_OR_REF
+  git clean -fd
+  git submodule update --init --recursive
+fi
+
+# build source code if /ceph folder exists
+if [ "$(ls -A /ceph)" ] ; then
+  cd /ceph
+  ./autogen.sh
+  ./configure \
+    --disable-static --with-debug --with-mantle \
+    CC='ccache gcc' CFLAGS="-Wall -g" \
+    CXX='ccache g++' CXXFLAGS="-Wall -g" \
+    LUA_LIBS="-llua5.2" \
+    $CEPH_PKGS
+
+  if [ -z $BUILD_THREADS ] ; then
+    BUILD_THREADS=4
+  fi
+
+  exec make -j$BUILD_THREADS
+else
+  echo "No /ceph folder found. Either specify a SHA1_OR_REF or put the code there."
+  exit 1
+fi
+
+exit 0

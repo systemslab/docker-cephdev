@@ -1,9 +1,9 @@
 Provides all the dependencies for building Mantle. Assuming the source 
-tree for ceph is in the host machine at `/path/to/cephsrc`, the 
-following will build ceph:
+tree for ceph is in the host machine at `/path/to/mantlesrc`, the 
+following will build Mantle:
 
 ```bash
-docker run --rm -ti /path/to/cephsrc:/ceph michaelsevilla/mantledev-build
+docker run -v /path/to/mantlesrc:/ceph/ michaelsevilla/mantledev-build
 ```
 # References:
 

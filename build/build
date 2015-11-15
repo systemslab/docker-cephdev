@@ -28,8 +28,8 @@ if [ "$(ls -A /ceph)" ] ; then
   ./autogen.sh
   ./configure \
     --disable-static --with-debug \
-    CC='ccache gcc' CFLAGS="-Wall -g" \
-    CXX='ccache g++' CXXFLAGS="-Wall -g" \
+    CC='ccache gcc' CFLAGS="-Wall -g $CFLAGS" \
+    CXX='ccache g++' CXXFLAGS="-Wall -g $CXXFLAGS" \
     $CEPH_PKGS
 
   if [ -z $BUILD_THREADS ] ; then
@@ -38,7 +38,7 @@ if [ "$(ls -A /ceph)" ] ; then
 
   exec make -j$BUILD_THREADS
 else
-  echo "No /ceph folder found."
+  echo "No code found in /ceph; put the code there or specify a SHA1_OR_REF."
   exit 1
 fi
 

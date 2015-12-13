@@ -18,3 +18,5 @@ RUN luarocks install busted && \
     autoreconf -I m4 -ivf && \
     ./configure CPPFLAGS="-std=c++11" && \
     make
+
+ENV LUA_CPATH=/lua-rados/.libs/rados.so

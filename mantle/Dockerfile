@@ -4,7 +4,7 @@ MAINTAINER Michael Sevilla <mikesevilla3@gmail.com>
 
 # install deps
 RUN apt-get update && \
-    apt-get install -y lua5.2 liblua5.2-dev && \
+    apt-get install -y lua5.2 liblua5.2-dev collectl && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /debian
 

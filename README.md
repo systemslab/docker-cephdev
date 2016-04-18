@@ -44,7 +44,7 @@ can be used with the official
 [`ceph-ansible`](https://github.com/ceph/ceph-ansible) playbooks.
 
 For more details, see [this wiki 
-page](https://github.com/ivotron/wiki).
+page](https://github.com/ivotron/docker-cephdev/wiki/Rationale).
 
 # Motivation
 

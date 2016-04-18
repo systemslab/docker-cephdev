@@ -1,0 +1,35 @@
+#!/bin/bash
+set -e
+
+if [ ! -d /ceph/.git ] ; then
+  echo "ERROR: no git repo in /ceph"
+  exit 1
+fi
+
+if [ -z $BUILD_THREADS ] ; then
+  BUILD_THREADS=4
+fi
+
+if [ -z $CLEAN ] ; then
+  CLEAN=false
+fi
+
+if [ -z $CONFIGURE_FLAGS ] ; then
+  CONFIGURE_FLAGS=""
+fi
+
+if [ "$CLEAN" = "true" ] ; then
+  git submodule foreach 'git clean -fdx && git reset --hard'
+  git clean -fdx && git reset --hard
+  git submodule update --init --recursive
+  rm -r install/ || true
+  mkdir -p install
+fi
+
+./autogen.sh
+autoconf || true
+./configure "$CONFIGURE_FLAGS"
+make -j$BUILD_THREADS
+make install DESTDIR=./install
+
+exit 0

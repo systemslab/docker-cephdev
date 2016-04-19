@@ -19,11 +19,11 @@ if [ "$CLEAN" = "true" ] ; then
   git clean -fdx && git reset --hard
   git submodule update --init --recursive
   rm -r build/ || true
-  mkdir -p build
-  cd build
-  cmake ..
 fi
 
+mkdir -p build
+cd build
+cmake ..
 cd /ceph/build
 make -j$BUILD_THREADS
 make install DESTDIR=./install

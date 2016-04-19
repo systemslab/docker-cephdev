@@ -3,8 +3,8 @@ tree for Ceph is in the host machine at `/path/to/cephsrc`, the
 following will build Ceph:
 
 ```bash
-docker run --rm -ti -v /path/to/cephsrc:/ceph \
-  ivotron/cephdev:jewel -c "./autogen.sh && ./configure && make -j4"
+cd /path/to/cephsrc
+docker run --rm -v `pwd`:/ceph ivotron/cephbuilder:jewel build-cmake
 ```
 
 Our goal is to have multiple images, one for each stable version of 

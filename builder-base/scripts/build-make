@@ -14,22 +14,21 @@ if [ -z $CLEAN ] ; then
   CLEAN=false
 fi
 
-if [ -z $CONFIGURE_FLAGS ] ; then
-  CONFIGURE_FLAGS=""
-fi
-
 if [ "$CLEAN" = "true" ] ; then
   git submodule foreach 'git clean -fdx && git reset --hard'
   git clean -fdx && git reset --hard
   git submodule update --init --recursive
   rm -r install/ || true
   mkdir -p install
+  ./autogen.sh
+  autoconf || true
 fi
 
-./autogen.sh
-autoconf || true
-./configure "$CONFIGURE_FLAGS"
+if [ -n $CONFIGURE_FLAGS ] ; then
+  ./configure "$CONFIGURE_FLAGS"
+fi
+
 make -j$BUILD_THREADS
-make install DESTDIR=./install
+make install DESTDIR=`pwd`/install
 
 exit 0

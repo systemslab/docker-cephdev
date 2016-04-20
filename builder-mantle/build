@@ -2,9 +2,7 @@
 set -e
 set -x
 
-export CONFIGURE_FLAGS='--with-librocksdb-static \
-  --target=x86_64 --host=x86_64 --build=x86_64 \
-  --disable-static --with-debug --with-mantle'
+export CONFIGURE_FLAGS='--with-librocksdb-static --disable-static --with-debug --with-mantle'
 export CC="ccache gcc"
 export CFLAGS="-Wall -g"
 export CXX="ccache g++"

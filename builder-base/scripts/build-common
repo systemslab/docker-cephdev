@@ -1,0 +1,57 @@
+if [ ! -d /ceph/ ] ; then
+  if [ "$CLONE_IN_CONTAINER" = "true" ] ; then
+    echo "creating /ceph folder inside container. Built files won't persist."
+    mkdir /ceph
+  else
+    echo "ERROR: no /ceph folder found"
+    exit 1
+  fi
+fi
+
+if [ -z "$GIT_URL" ] ; then
+  GIT_URL="https://github.com/ceph/ceph.git"
+fi
+
+if [ -z "$ADD_URL_AS_REMOTE" ] ; then
+  ADD_URL_AS_REMOTE="true"
+fi
+
+if [ -n "$SHA1_OR_REF" ] ; then
+  if [ ! -d /ceph/.git ] ; then
+    cd /ceph
+    git clone --recursive $GIT_URL .
+  elif [ "$ADD_URL_AS_REMOTE" = "true" ] ; then
+    remote_name=`basename $(dirname $GIT_URL)`
+    already_exists=`git remote show | grep $remote_name | wc -l`
+    if [ $already_exists = "0" ] ; then
+      git remote add $remote_name $GIT_URL
+      git remote update
+    fi
+  fi
+  git submodule foreach 'git clean -fdx && git reset --hard'
+  git clean -fdx
+  git reset --hard
+  git checkout -b $SHA1_OR_REF $SHA1_OR_REF
+  git clean -fd
+  git submodule update --init --recursive
+fi
+
+if [ -z $CLEAN ] ; then
+  CLEAN=false
+fi
+
+if [ "$CLEAN" = "true" ] ; then
+  git submodule foreach 'git clean -fdx && git reset --hard'
+  git clean -fdx && git reset --hard
+  git submodule update --init --recursive
+  rm -rf install/
+  rm -rf build/install
+fi
+
+if [ -z $BUILD_THREADS ] ; then
+  BUILD_THREADS=4
+fi
+
+if [ -z $IMAGE_NAME ] ; then
+  IMAGE_NAME="ceph-`git rev-parse --abbrev-ref HEAD`"
+fi

@@ -15,5 +15,6 @@ RUN apt-get update && apt-get install -y wget && \
     chmod 755 install-deps.sh && ./install-deps.sh && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* debian/
-ADD scripts/* /usr/bin/
+ADD scripts/* /root/bin/
+ENV PATH=$PATH:/root/bin
 WORKDIR /ceph

@@ -1,0 +1,67 @@
+if [ -z "$IMAGE_NAME" ] ; then
+  echo "ERROR: expecting IMAGE_NAME variable"
+  exit 1
+fi
+
+mycid=`cat /proc/self/cgroup | grep 'docker' | sed 's/^.*\///' | tail -n1`
+if [ ${#mycid} != "64" ] ; then
+  echo "ERROR: cannot obtain ID of container"
+  exit 1
+fi
+cid='dmn-1234567890-foo'
+function rm_container {
+  docker stop $cid &> /dev/null || true
+  docker rm -f $cid &> /dev/null || true
+}
+
+if [ ! -d $CEPH_INSTALL_PATH ] ; then
+  echo "ERROR: expecting $CEPH_INSTALL_PATH folder"
+  exit 1
+fi
+
+if [ -z "$REBUILD_BASE" ] ; then
+  REBUILD_BASE="false"
+fi
+
+if [ ! -d $CEPH_INSTALL_PATH/base ] || [ $REBUILD_BASE = "yes" ] ; then
+  rm -fr $CEPH_INSTALL_PATH/base
+
+  echo "creating base image $IMAGE_NAME-base"
+  rm_container
+  docker run \
+    --name $cid \
+    --entrypoint=/bin/bash \
+    --volumes-from $mycid \
+    ceph/daemon -c "cp -r $CEPH_INSTALL_PATH/* / && cp /root/bin/singlenode /usr/bin/"
+  docker commit $cid $IMAGE_NAME-base &> /dev/null
+  rm_container
+
+  echo "creating base folder to obtain deltas"
+  mkdir -p $CEPH_INSTALL_PATH/base
+  rsync -a $CEPH_INSTALL_PATH/ $CEPH_INSTALL_PATH/base
+  rm -fr $CEPH_INSTALL_PATH/base/base
+
+  docker tag $IMAGE_NAME-base $IMAGE_NAME
+  echo "created image $IMAGE_NAME"
+  exit 0
+fi
+
+# get the delta
+delta=`rsync -ani --exclude=base --out-format='%n' $CEPH_INSTALL_PATH/ $CEPH_INSTALL_PATH/base`
+delta=`echo $delta | sed 's/.\///'`
+if [ "$delta" = "" ]; then
+  echo "Couldn't detect any files changed. Finishing"
+  exit 0
+fi
+printf "creating image $IMAGE_NAME with new files: \n$delta\n"
+delta=`echo $delta | tr '\n' ' '`
+rm_container
+docker run \
+  --name $cid \
+  --entrypoint=/bin/bash \
+  --volumes-from $mycid \
+  $IMAGE_NAME-base -c "cd $CEPH_INSTALL_PATH && cp --parents $delta /"
+docker commit $cid $IMAGE_NAME &> /dev/null
+rm_container
+echo "created image $IMAGE_NAME"
+exit 0

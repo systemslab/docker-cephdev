@@ -1,15 +1,15 @@
-
-build_ceph='docker run --rm -v `pwd`:/ceph'
-
-function build_daemon {
+# TODO:
+#  * add way of identifying cephbuilder image tag based on HEAD
+#  * if no args given, select ivotron/cephbuilder:jewel
+function dmake {
   docker run --rm --privileged \
     -v `which docker`:/usr/bin/docker \
     -v /var/run/docker.sock:/var/run/docker.sock \
-    -v /root/ \
-    -v $1:/install \
-    ivotron/cephbuilder-daemon $2
+    -v /root/bin \
+    -v `pwd`:/ceph $@
 }
 
+# TODO: figure out how to get networking stuff
 function run_daemon {
   docker run -d \
     --name ceph \

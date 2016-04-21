@@ -6,11 +6,11 @@ function dmake {
     -v `which docker`:/usr/bin/docker \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /root/bin \
-    -v `pwd`:/ceph $@
+    -v `pwd`:/ceph "$@"
 }
 
 # TODO: figure out how to get networking stuff
-function run_daemon {
+function dstart {
   docker run -d \
     --name ceph \
     --net=host \

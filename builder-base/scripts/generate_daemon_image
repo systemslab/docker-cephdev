@@ -47,8 +47,7 @@ if [ ! -d $CEPH_INSTALL_PATH/base ] || [ $REBUILD_BASE = "yes" ] ; then
 fi
 
 # get the delta
-delta=`rsync -ani --exclude=base --out-format='%n' $CEPH_INSTALL_PATH/ $CEPH_INSTALL_PATH/base`
-delta=`echo $delta | sed 's/.\///'`
+delta=`rsync -ani --size-only --omit-dir-times --exclude=base --out-format='%n' $CEPH_INSTALL_PATH/ $CEPH_INSTALL_PATH/base`
 if [ "$delta" = "" ]; then
   echo "Couldn't detect any files changed. Finishing"
   exit 0

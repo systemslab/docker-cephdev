@@ -57,3 +57,5 @@ if [ -z $IMAGE_NAME ] ; then
 fi
 
 CCACHE_DIR=/ceph/ccache
+CCACHE_COMPRESS=""
+ccache --max-size 10G

@@ -6,7 +6,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ENV REF="jewel"
 
 # install deps
-RUN apt-get update && apt-get install -y wget && \
+RUN apt-get update && apt-get install -y wget lxc && \
     wget https://raw.githubusercontent.com/ceph/ceph/$REF/install-deps.sh && \
     wget https://raw.githubusercontent.com/ceph/ceph/$REF/debian/control && \
     mkdir debian && mv control debian && \

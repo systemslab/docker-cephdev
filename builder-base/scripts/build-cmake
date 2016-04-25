@@ -8,7 +8,7 @@ mkdir -p build
 cd build
 
 if [ "$RECONFIGURE" = "true" ] || [ "$CLEAN" = "true" ] ; then
-  cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr $CONFIGURE_FLAGS ..
+  cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr "$CONFIGURE_FLAGS" ..
 fi
 
 cd /ceph/build

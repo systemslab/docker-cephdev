@@ -1,3 +1,9 @@
+if [ -z "$GENERATE_DOCKER_IMAGE" ] ; then
+  GENERATE_DOCKER_IMAGE="true"
+fi
+
+if [ "$GENERATE_DOCKER_IMAGE" = "true" ] ; then
+
 if [ -z "$IMAGE_NAME" ] ; then
   echo "ERROR: expecting IMAGE_NAME variable"
   exit 1
@@ -17,6 +23,9 @@ function rm_container {
 if [ ! -d $CEPH_INSTALL_PATH ] ; then
   echo "ERROR: expecting $CEPH_INSTALL_PATH folder"
   exit 1
+fi
+
+if [ -z "$REBUILD_BASE" ] ; then
 fi
 
 if [ -z "$REBUILD_BASE" ] ; then
@@ -63,4 +72,5 @@ docker run \
 docker commit $cid $IMAGE_NAME &> /dev/null
 rm_container
 echo "created image $IMAGE_NAME"
-exit 0
+
+fi # GENERATE_DOCKER_IMAGE

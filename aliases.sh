@@ -2,7 +2,7 @@
 #  * add way of identifying cephbuilder image tag based on HEAD
 #  * if no args given, select ivotron/cephbuilder:jewel
 function dmake {
-  docker run --rm --privileged \
+  docker run --rm -ti --privileged \
     -v `which docker`:/usr/bin/docker \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /root/bin \

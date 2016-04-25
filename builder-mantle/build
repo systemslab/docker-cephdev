@@ -2,11 +2,11 @@
 set -e
 set -x
 
-export CONFIGURE_FLAGS='--with-librocksdb-static --disable-static --with-debug --with-mantle'
+export CONFIGURE_FLAGS="--disable-static --with-mantle --without-rbd --without-rgw --without-debug $CONFIGURE_FLAGS"
+export CFLAGS="-Os -s"
+export CXXFLAGS="-Os -s"
 export CC="ccache gcc"
-export CFLAGS="-Wall -g"
 export CXX="ccache g++"
-export CXXFLAGS="-Wall -g"
 export LUA_LIBS="-llua5.2"
 
 build-make

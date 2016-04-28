@@ -42,7 +42,7 @@ if [ ! -d $CEPH_INSTALL_PATH/base ] || [ $REBUILD_BASE = "yes" ] ; then
     --entrypoint=/bin/bash \
     --volumes-from $mycid \
     ceph/daemon -c "cp -r $CEPH_INSTALL_PATH/* / && cp /root/bin/singlenode /usr/bin/"
-  docker commit $cid $IMAGE_NAME-base &> /dev/null
+  docker commit --change='ENTRYPOINT ["/entrypoint.sh"]' $cid $IMAGE_NAME-base &> /dev/null
   rm_container
 
   echo "creating base folder to obtain deltas"
@@ -69,7 +69,7 @@ docker run \
   --entrypoint=/bin/bash \
   --volumes-from $mycid \
   $IMAGE_NAME-base -c "cd $CEPH_INSTALL_PATH && cp --parents $delta /"
-docker commit $cid $IMAGE_NAME &> /dev/null
+docker commit --change='ENTRYPOINT ["/entrypoint.sh"]' $cid $IMAGE_NAME &> /dev/null
 rm_container
 echo "created image $IMAGE_NAME"
 

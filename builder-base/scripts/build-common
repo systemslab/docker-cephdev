@@ -25,9 +25,9 @@ if [ -n "$SHA1_OR_REF" ] ; then
     already_exists=`git remote show | grep $remote_name | wc -l`
     if [ $already_exists = "0" ] ; then
       git remote add $remote_name $GIT_URL
-      git remote update
     fi
   fi
+  git remote update
   git submodule foreach 'git clean -fdx && git reset --hard'
   git clean -fdx
   git reset --hard

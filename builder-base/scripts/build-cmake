@@ -15,6 +15,15 @@ cd /ceph/build
 make -j$BUILD_THREADS
 make install DESTDIR=./install
 
+if [ -z "$INSTALL_HEADERS" ] ; then
+  INSTALL_HEADERS=true
+fi
+
+if [ "$INSTALL_HEADERS" = "true" ] ; then
+  mkdir --parents /ceph/build/install/usr/include/rados/
+  cp -L /ceph/src/include/rados/* /ceph/build/install/usr/include/rados/
+fi
+
 export CEPH_INSTALL_PATH=/ceph/build/install
 . generate_daemon_image
 

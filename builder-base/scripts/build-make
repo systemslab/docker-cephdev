@@ -19,7 +19,7 @@ fi
 
 if [ "$INSTALL_HEADERS" = "true" ] ; then
   mkdir --parents /ceph/install/usr/include/rados/
-  cp -L include/rados/* /ceph/install/usr/include/rados/
+  cp -L /ceph/src/include/rados/* /ceph/install/usr/include/rados/
 fi
 
 export CEPH_INSTALL_PATH=/ceph/install

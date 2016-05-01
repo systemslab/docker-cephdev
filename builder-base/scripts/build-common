@@ -56,6 +56,6 @@ if [ -z $IMAGE_NAME ] ; then
   IMAGE_NAME="ceph-`git rev-parse --abbrev-ref HEAD`"
 fi
 
-CCACHE_DIR=/ceph/ccache
-CCACHE_COMPRESS=""
+export CCACHE_DIR=/ceph/ccache
+export CCACHE_COMPRESS=""
 ccache --max-size 10G

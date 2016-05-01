@@ -25,8 +25,7 @@ if [ ! -d $CEPH_INSTALL_PATH ] ; then
   exit 1
 fi
 
-if [ -z "$REBUILD_BASE" ] ; then
-fi
+# TODO: skip creating a base if we're installing on this container (see #17)
 
 if [ -z "$REBUILD_BASE" ] ; then
   REBUILD_BASE="false"
@@ -41,7 +40,7 @@ if [ ! -d $CEPH_INSTALL_PATH/base ] || [ $REBUILD_BASE = "yes" ] ; then
     --name $cid \
     --entrypoint=/bin/bash \
     --volumes-from $mycid \
-    ceph/daemon -c "cp -r $CEPH_INSTALL_PATH/* / && cp /root/bin/singlenode /usr/bin/"
+    ceph/daemon:jewel -c "cp -r $CEPH_INSTALL_PATH/* / && cp /root/bin/singlenode /usr/bin/"
   docker commit --change='ENTRYPOINT ["/entrypoint.sh"]' $cid $IMAGE_NAME-base &> /dev/null
   rm_container
 
@@ -54,6 +53,9 @@ if [ ! -d $CEPH_INSTALL_PATH/base ] || [ $REBUILD_BASE = "yes" ] ; then
   echo "created image $IMAGE_NAME"
   exit 0
 fi
+
+# TODO: move binaries to /usr if we're installing on this container. This also 
+# means that we'll skip committing the container
 
 # get the delta
 delta=`rsync -ani --size-only --omit-dir-times --exclude=base --out-format='%n' $CEPH_INSTALL_PATH/ $CEPH_INSTALL_PATH/base`
@@ -73,4 +75,4 @@ docker commit --change='ENTRYPOINT ["/entrypoint.sh"]' $cid $IMAGE_NAME &> /dev/
 rm_container
 echo "created image $IMAGE_NAME"
 
-fi # GENERATE_DOCKER_IMAGE
+fi

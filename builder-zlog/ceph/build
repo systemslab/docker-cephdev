@@ -1,0 +1,40 @@
+#!/bin/bash
+set -e
+set -x
+
+. build-common
+
+# this must be done after the checkout
+./autogen.sh
+autoconf || true
+./configure --prefix=/usr $CONFIGURE_FLAGS
+
+# build server ZLog libraries
+cd src/
+make -j$BUILD_THREADS libcls_zlog.la
+make -j$BUILD_THREADS libcls_zlog_client.la
+mkdir --parents /ceph/install/usr/lib/rados-classes/
+mkdir --parents /ceph/install/usr/include/rados
+cp .libs/libcls_zlog.so /ceph/install/usr/lib/rados-classes/
+cp .libs/libcls_zlog_client.* /ceph/install/usr/lib/
+cp cls/zlog/cls_zlog_client.h /ceph/install/usr/include/rados/
+
+# build client ZLog stuff
+BRANCH=${branch:-master}
+git clone --branch=$BRANCH https://github.com/noahdesu/zlog.git /src/zlog
+cd /src/zlog
+autoreconf -ivf
+CPPFLAGS=-I/ceph/install/usr/include/ LDFLAGS=-L/ceph/install/usr/lib/ ./configure
+make -j$BUILD_THREADS
+mkdir --parents /ceph/install/src/
+cp -r /src/zlog /ceph/install/src/zlog
+
+mkdir --parents /ceph/install/usr/local/bin
+cp src/zlog-test /ceph/install/usr/local/bin
+cp src/zlog-seqr /ceph/install/usr/local/bin
+
+cd /ceph
+export CEPH_INSTALL_PATH=/ceph/install
+. generate_daemon_image
+
+exit 0

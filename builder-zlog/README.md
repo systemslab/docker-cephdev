@@ -1,30 +1,52 @@
-This image brings up Ceph with Zlog. We also use the same image for the client by changing the entrypoint. The technical steps for this image are:
+These Docker images run ZLog and its client. For the Ceph image, the technical
+steps are:
 
-1. installs the ceph master branch
+1. installs the ceph jewel release
 2. pulls zlog ceph tree and the zlog source
 2. builds zlog OSD libraries against the zlog ceph tree
 4. builds zlog servers and clients
 5. adds zlog object interface plugins to the OSDs
 
 ===================================================
-Quickstart
+Build ZLog Ceph Image
 ===================================================
 
-Build zlog, launch Ceph with zlog, start a sequencer:
+We assume `docker-cephdev` is in `~/docker-cephdev` and some version of Ceph is
+in `/tmp/ceph-zlog`.
 
-    docker run -d \
-        --name=zlogdev-build \
-        --net=host \
-        --volume=/etc/ceph:/etc/ceph \
-        -e CEPH_NETWORK=127.0.0.1/24 \
-        -e MON_IP=127.0.0.1 \
-        michaelsevilla/zlogdev-build
+Create the builder image:
+
+    . ~/docker-cephdev/aliases.sh
+    docker build -t zlog-ceph ~/docker-cephdev/builder-zlog/ceph
+
+Build the actual zlog image:
+
+    cd /tmp/ceph-zlog
+    dmake \
+      -e SHA1_OR_REF=remotes/noahdesu/zlog/jewel \
+      -e GIT_URL=https://github.com/noahdesu/ceph.git \
+      zlog-ceph
+
+===================================================
+Build ZLog Sequencer and Client Images
+===================================================
+
+After building the ZLog Ceph image: 
+
+    docker build -t zlog/sequencer ~/docker-cephdev/builder-zlog/sequencer
+    docker build -t zlog/client ~/docker-cephdev/builder-zlog/client
+
+===================================================
+Build the ZLog Client Image
+===================================================
     
-Run the zlog tests:
+Tag the images and push 'em!
 
-    docker run --rm \
-        --name=zlog-client \
-        --net=host \
-        --volume /etc/ceph:/etc/ceph \
-        --entrypoint=/src/zlog/src/test \
-        michaelsevilla/zlogdev-build
+    docker tag zlog-ceph piha.soe.ucsc.edu:5000/zlog/ceph:jewel
+    docker tag zlog/sequencer piha.soe.ucsc.edu:5000/zlog/sequencer:jewel
+    docker tag zlog/client piha.soe.ucsc.edu:5000/zlog/client:jewel
+    docker push piha.soe.ucsc.edu:5000/zlog/ceph:jewel
+    docker push piha.soe.ucsc.edu:5000/zlog/sequencer:jewel
+    docker push piha.soe.ucsc.edu:5000/zlog/client:jewel
+
+EOF

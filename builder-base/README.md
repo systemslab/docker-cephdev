@@ -14,3 +14,6 @@ The [`scripts`](scripts) folder contains convenience bash scripts
 (inspired by the 
 [`autobuild-ceph`](https://github.com/ceph/autobuild-ceph) repo) to 
 ceph in multiple ways.
+
+/lib/x86_64-linux-gnu/
+talk about adding alias

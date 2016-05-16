@@ -1,5 +1,6 @@
-FROM ubuntu:trusty # IMPORTANT: this should be the same as the one used by ceph/daemon
-                   #            otherwise dependencies are not going to match (e.g. libboost_threads)
+FROM ubuntu:trusty 
+# IMPORTANT: this should be the same as the one used by ceph/daemon
+#            otherwise dependencies are not going to match (e.g. libboost_threads)
 
 MAINTAINER Ivo Jimenez <ivo.jimenez@gmail.com>
 

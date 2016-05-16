@@ -31,7 +31,7 @@ if [ -n "$SHA1_OR_REF" ] ; then
   git submodule foreach 'git clean -fdx && git reset --hard'
   git clean -fdx
   git reset --hard
-  git checkout -b $SHA1_OR_REF $SHA1_OR_REF
+  git checkout -b $SHA1_OR_REF $SHA1_OR_REF || true
   git clean -fd
   git submodule update --init --recursive
 fi

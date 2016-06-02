@@ -1,0 +1,28 @@
+---
+dist: trusty
+
+sudo: required
+
+services:
+  - docker
+
+# install newer Docker version so we can use ARG
+#  - reference: https://github.com/TrueCar/gluestick/pull/116
+before_install:
+  - sudo apt-get -y -qq update
+  - sudo apt-get -o Dpkg::Options::="--force-confnew" install -y docker-engine
+
+env:
+  - JOB="builder-base"
+  - JOB="builder-mantle"
+  - JOB="builder-zlog/ceph"
+  - JOB="builder-zlog/sequencer"
+  - JOB="builder-zlog/client"
+
+script:
+  # sanity check
+  - docker ps -a
+  - docker --version
+
+  # build the builder docker images
+  - docker build -t michaelsevilla/builder-ceph $JOB/

@@ -58,7 +58,7 @@ fi
 # means that we'll skip committing the container
 
 # get the delta
-delta=`rsync -ani --size-only --omit-dir-times --exclude=base --out-format='%n' $CEPH_INSTALL_PATH/ $CEPH_INSTALL_PATH/base`
+delta=`rsync -ani --omit-dir-times --exclude=base --out-format='%n' $CEPH_INSTALL_PATH/ $CEPH_INSTALL_PATH/base`
 if [ "$delta" = "" ]; then
   echo "Couldn't detect any files changed. Finishing"
   exit 0

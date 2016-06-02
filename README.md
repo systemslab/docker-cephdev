@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/systemslab/docker-cephdev.svg?branch=master)](https://travis-ci.org/systemslab/docker-cephdev)
+
 # Ceph Development in Docker
 
 Generate Docker images with customized versions of Ceph. The general 

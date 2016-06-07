@@ -11,4 +11,12 @@ export LUA_LIBS="-llua5.2"
 
 build-make
 
+mkdir -p /ceph/install/usr/local/lib/rados-classes/ /ceph/install//usr/local/share/ceph/rados-classes/
+cp /ceph/src/.libs/libcls_lua.so /ceph/install/usr/local/lib/rados-classes/
+cp /ceph/src/.libs/libcls_bal_lua.so /ceph/install/usr/local/lib/rados-classes/
+cp /ceph/src/mds/mantle/bal/lua/libmantle.lua /ceph/install/usr/local/share/ceph/rados-classes/libmantle.lua
+
+export CEPH_INSTALL_PATH=/ceph/install
+. generate_daemon_image
+
 exit 0

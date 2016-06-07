@@ -1,4 +1,4 @@
-FROM ivotron/cephbuilder:jewel
+FROM cephbuilder/mantle:jewel
 
 MAINTAINER Michael Sevilla <mikesevilla3@gmail.com>
 

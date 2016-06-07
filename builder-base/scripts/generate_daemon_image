@@ -70,7 +70,7 @@ docker run \
   --name $cid \
   --entrypoint=/bin/bash \
   --volumes-from $mycid \
-  $IMAGE_NAME-base -c "cd $CEPH_INSTALL_PATH && cp --parents $delta /"
+  $IMAGE_NAME-base -c "cd $CEPH_INSTALL_PATH && cp -r --parents $delta /"
 docker commit --change='ENTRYPOINT ["/entrypoint.sh"]' $cid $IMAGE_NAME &> /dev/null
 rm_container
 echo "created image $IMAGE_NAME"

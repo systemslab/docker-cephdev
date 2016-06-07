@@ -1,4 +1,4 @@
-FROM cephbuilder/mantle:jewel
+FROM cephbuilder/ceph:jewel
 
 MAINTAINER Michael Sevilla <mikesevilla3@gmail.com>
 

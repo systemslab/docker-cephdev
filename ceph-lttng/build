@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [ -z $CEPH_SRC ]; then
+  echo "ERROR: please fill in $CEPH_SRC to tell me where the ceph src code is"
+  exit
+fi
+
+set -ex
+
+. ../aliases.sh
+
+cd $CEPH_SRC
+dmake \
+  -e GIT_URL="https://github.com/michaelsevilla/ceph.git" \
+  -e SHA1_OR_REF="remotes/origin/mds-reqlatency" \
+  -e CONFIGURE_FLAGS="--with-lttng --without-debug  --without-rbd --without-libzfs --without-kinetic" \
+  -e RECONFIGURE="true" \
+  -e BUILD_THREADS=`grep processor /proc/cpuinfo | wc -l` \
+  cephbuilder/ceph:jewel build-make
+cd -
+
+docker build -t ceph-mds-reqlatency/daemon:jewel .

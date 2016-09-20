@@ -14,7 +14,6 @@ before_install:
 
 env:
   - JOB="builder-base"
-  - JOB="builder-mantle"
   - JOB="builder-zlog/ceph"
   - JOB="builder-zlog/sequencer"
   - JOB="builder-zlog/client"

@@ -40,6 +40,10 @@ public network = ${CEPH_NETWORK}
 cluster network = ${CEPH_NETWORK}
 ENDHERE
 
+   if [ -f /etc/ceph/${CLUSTER}_extra.conf ] ; then
+      cat /etc/ceph/${CLUSTER}_extra.conf >> /etc/ceph/${CLUSTER}.conf
+   fi
+
    # Generate administrator key
    ceph-authtool /etc/ceph/${CLUSTER}.client.admin.keyring --create-keyring --gen-key -n client.admin --set-uid=0 --cap mon 'allow *' --cap osd 'allow *' --cap mds 'allow'
 

@@ -31,6 +31,12 @@ if [ -z "$REBUILD_BASE" ] ; then
   REBUILD_BASE="false"
 fi
 
+if [ -z "$BASE_DAEMON_IMAGE" ] ; then
+  BASE_DAEMON_IMAGE="ceph/daemon:tag-build-master-jewel-ubuntu-16.04"
+fi
+
+docker pull $BASE_DAEMON_IMAGE
+
 if [ ! -d $CEPH_INSTALL_PATH/base ] || [ $REBUILD_BASE = "yes" ] ; then
   rm -fr $CEPH_INSTALL_PATH/base
 
@@ -40,7 +46,7 @@ if [ ! -d $CEPH_INSTALL_PATH/base ] || [ $REBUILD_BASE = "yes" ] ; then
     --name $cid \
     --entrypoint=/bin/bash \
     --volumes-from $mycid \
-    ceph/daemon:jewel -c "cp -r $CEPH_INSTALL_PATH/* / && cp /root/bin/singlenode /usr/bin/"
+    $BASE_DAEMON_IMAGE -c "cp -r $CEPH_INSTALL_PATH/* / && cp /root/bin/singlenode /usr/bin/"
   docker commit --change='ENTRYPOINT ["/entrypoint.sh"]' $cid $IMAGE_NAME-base &> /dev/null
   rm_container
 

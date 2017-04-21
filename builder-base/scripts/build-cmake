@@ -12,6 +12,7 @@ if [ "$RECONFIGURE" = "true" ] || [ "$CLEAN" = "true" ] ; then
 fi
 
 cd /ceph/build
+
 make -j$BUILD_THREADS
 make install DESTDIR=./install
 

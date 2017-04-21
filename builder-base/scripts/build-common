@@ -49,7 +49,7 @@ if [ "$CLEAN" = "true" ] ; then
 fi
 
 if [ -z $BUILD_THREADS ] ; then
-  BUILD_THREADS=4
+  BUILD_THREADS=`grep processor /proc/cpuinfo | wc -l`
 fi
 
 if [ -z $IMAGE_NAME ] ; then

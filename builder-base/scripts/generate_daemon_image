@@ -46,7 +46,7 @@ if [ ! -d $CEPH_INSTALL_PATH/base ] || [ $REBUILD_BASE = "yes" ] ; then
     --name $cid \
     --entrypoint=/bin/bash \
     --volumes-from $mycid \
-    $BASE_DAEMON_IMAGE -c "cp -r $CEPH_INSTALL_PATH/* / && cp /root/bin/singlenode /usr/bin/"
+    $BASE_DAEMON_IMAGE -c "cp -r $CEPH_INSTALL_PATH/* /"
   docker commit --change='ENTRYPOINT ["/entrypoint.sh"]' $cid $IMAGE_NAME-base &> /dev/null
   rm_container
 

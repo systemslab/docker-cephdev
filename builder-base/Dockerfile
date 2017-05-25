@@ -17,6 +17,5 @@ RUN apt-get update && apt-get install -y wget lxc ccache \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* debian/
 ADD scripts/* /root/bin/
-VOLUME /root/bin
 ENV PATH=$PATH:/root/bin
 WORKDIR /ceph

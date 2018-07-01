@@ -18,7 +18,7 @@ function dmake {
     exit 1
   fi
 
-  docker run --rm $libtdl_path \
+  docker run --rm $libltdl_path \
     -v $docker_path:/usr/bin/docker \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v `pwd`:/ceph "$@"

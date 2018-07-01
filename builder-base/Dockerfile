@@ -1,11 +1,11 @@
-FROM ubuntu:trusty
+FROM ubuntu:xenial
 # IMPORTANT: this should be the same as the one used by ceph/daemon
 #            otherwise dependencies are not going to match (e.g. libboost_threads)
 
 MAINTAINER Ivo Jimenez <ivo.jimenez@gmail.com>
 
 ARG DEBIAN_FRONTEND=noninteractive
-ENV REF="jewel"
+ENV REF="luminous"
 
 # install deps
 RUN apt-get update && apt-get install -y wget lxc ccache \

@@ -5,7 +5,7 @@ FROM ubuntu:xenial
 MAINTAINER Ivo Jimenez <ivo.jimenez@gmail.com>
 
 ARG DEBIAN_FRONTEND=noninteractive
-ENV REF="master"
+ENV REF="kraken"
 
 # install deps
 RUN apt-get update && apt-get install -y wget lxc ccache libudev-dev \

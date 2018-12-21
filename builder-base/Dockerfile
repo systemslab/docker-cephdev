@@ -8,7 +8,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 ENV REF="master"
 
 # install deps
-RUN apt-get update && apt-get install -y wget lxc ccache \
+RUN apt-get update && apt-get install -y wget lxc ccache libudev-dev \
       valgrind gdb python-virtualenv gdisk kpartx hdparm jq xmlstarlet && \
     wget https://raw.githubusercontent.com/ceph/ceph/$REF/install-deps.sh && \
     wget https://raw.githubusercontent.com/ceph/ceph/$REF/debian/control && \
